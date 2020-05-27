@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning JavaScript</title>
+    <style>
+        body{
+            background-color: rosybrown;
+            color: gray;
+        }
+        .expense{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 20vh;
+        }
+        .color{
+            background-color: rgb(0,0,0,0.4);
+            color: grey;
+        }
+        .settable{
+            margin-top: 10px;
+            background-color: rgba(10, 10, 10, 0.582);
+            max-height: fit-content;
+        }
+
+    </style>
+
+</head>
+<body>
+    <nav class="navbar navbar-inverse fixed-top">
+        <span class="navbar-brand mb-0 h1" style="font-size: x-large; font-family: serif; letter-spacing: 0.5em;">EXPENSE TRACKER</span>
+    </nav>
+    <div class="container-fluid row">
+    <div class="expense col-xs-4 col-xs-offset-4">
+        <h1 style="align-self: center; font-family: serif; font-weight: bold; color: rgba(53, 4, 32, 0.644);" id="headingtotal">Total expense:</h1>
+            <div class="form-group">
+        <input
+              id="inputamount"
+              type="text"
+              class="form-control settable"
+              style="font-size: large;"
+              placeholder="Amount spent"/> 
+            </div>
+            <div class="form-group">
+        <input 
+              id="inputdesc"
+              type="text"
+              class="form-control settable"
+              style="font-size: large;"
+              placeholder="Spent on"
+              />
+            </div>
+        <button class="btn color settable" style="font-size: large;" id="btnadd">ADD</button>
+        <div>
+            <ul class="list-group settable" id="expensetable">
+
+        </ul>
+        </div>
+        </div>
+        </div>
+    <script>
+        //get heading element
+        const headingEl = document.querySelector("#headingtotal");
+        
+        //get reference to disc element
+        const inputdescEl = document.querySelector("#inputdesc");
+
+        // ref to input amount
+        const inputelement = document.querySelector("#inputamount");
+
+        //get ref to table
+        const expensetable = document.querySelector("#expensetable");
+        //init value of expense at 0
+        let totalexpense = 0;
+
+        //set heading element to totalexpense
+        headingEl.textContent = totalexpense;
+        
+        //all expense at one place
+        const allexpenses = [];
+
+        //on btn-click add inputamount to totalexpense
+        function addexpense(){
+
+            const expenseitem = {};
+
+            //read value from inputamount
+            const textamount = inputelement.value;
+
+            //read desc from inputdesc
+            const textdesc = inputdescEl.value;
+
+            //covert in no.
+            const expense = parseInt(textamount,10);
+
+            //put it in object
+            expenseitem.desc = textdesc;
+            expenseitem.amount = expense;
+
+            allexpenses.push(expenseitem);
+            console.table(allexpenses);
+
+            //add that value to totalexpense
+            totalexpense = totalexpense + expense;
+            
+            //set heading element to totalexpense
+            const sometext = `TOTAL EXPENSES: ${totalexpense}` 
+            headingEl.textContent = sometext; 
+            console.log({totalexpense})
+
+            //show table here
+            const allexpenseHTML = allexpenses.map(expense => createlist(expense));
+
+                //return `<div> ${expense.amount} :: ${expense.desc}</div>`
+            const joinedallexpenseHTML = allexpenseHTML.join("");
+
+            expensetable.innerHTML = joinedallexpenseHTML
+            console.log(joinedallexpenseHTML)
+        }
+
+        //get the btn element
+        const element = document.querySelector("#btnadd");
+
+        //listen to click
+        element.addEventListener("click", addexpense, false);
+
+        function createlist({desc,amount}){
+            return `
+                <li class="list-group-item settable">
+                <div class="list-group " style="font-size:15px">
+                <span>${desc}
+
+                ${amount}</span>
+                
+                  <button class="btn text-right mb-3" style="">
+                  <i class="fa fa-trash fa-2x" style="color: gray;"></i>
+                  </button>
+                </li>
+                </div>` 
+        }
+
+    </script>
+</body>
+</html>
