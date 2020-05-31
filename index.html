@@ -13,7 +13,7 @@
     <style>
         body{
             background-color: rosybrown;
-            color: gray;
+            color: white;
         }
         .expense{
             display: flex;
@@ -22,31 +22,44 @@
             margin-top: 20vh;
         }
         .color{
-            background-color: rgb(0,0,0,0.4);
-            color: grey;
+            background-color:  rgba(5, 5, 5, 0.582);
+            color:white;
         }
         .settable{
-            margin-top: 10px;
-            background-color: rgba(10, 10, 10, 0.582);
-            max-height: fit-content;
+            background-color: rgba(5, 5, 5, 0.582);
+            font-size: small;
+            color: white;
         }
+        input[type="text"]::placeholder { /* Firefox, Chrome, Opera */ 
+        color:white;  
+        } 
+        .footer{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 30px;
+        background-color: rgb(49, 48, 48);
+        text-align: center;
+}
 
     </style>
 
 </head>
 <body>
-    <nav class="navbar navbar-inverse fixed-top">
-        <span class="navbar-brand mb-0 h1" style="font-size: x-large; font-family: serif; letter-spacing: 0.5em;">EXPENSE TRACKER</span>
+    <nav class="navbar fixed-top" style="background-color:  rgb(49, 48, 48) ;">
+        <div class="container row col-xs-9 col-xs-offset-2">
+        <span class="navbar-brand mb-0" style="font-size: x-large; font-family: serif; color: white;">XPENSIFY</span>
+        <span class="navbar-brand mb-0"  id="headingtotal" style="font-size:x-large; font-family: serif; color: white;"></span>
+        </div>
     </nav>
-    <div class="container-fluid row">
-    <div class="expense col-xs-4 col-xs-offset-4">
-        <h1 style="align-self: center; font-family: serif; font-weight: bold; color: rgba(53, 4, 32, 0.644);" id="headingtotal">Total expense:</h1>
+<div class="container-fluid row">
+    <div class="expense col-xs-10 col-xs-offset-1">
             <div class="form-group">
         <input
               id="inputamount"
               type="text"
               class="form-control settable"
-              style="font-size: large;"
+              style="font-size: medium;"
               placeholder="Amount spent"/> 
             </div>
             <div class="form-group">
@@ -54,18 +67,23 @@
               id="inputdesc"
               type="text"
               class="form-control settable"
-              style="font-size: large;"
+              style="font-size: medium;"
               placeholder="Spent on"
               />
             </div>
-        <button class="btn color settable" style="font-size: large;" id="btnadd">ADD</button>
+        <button class="btn color settable" style="font-size: large; " id="btnadd">ADD</button>
         <div>
-            <ul class="list-group settable" id="expensetable">
-
-        </ul>
+            <ul class="list-group" id="expensetable"style="margin-bottom:20vh;">
+              
+             </ul>
         </div>
-        </div>
-        </div>
+    </div>
+</div>
+<div class="footer stylish-color-dark">
+    <div class="footer-content">
+      Copyright@SWASTIKA YADAV
+    </div>
+</div>
     <script>
         //get heading element
         const headingEl = document.querySelector("#headingtotal");
@@ -104,17 +122,16 @@
             //put it in object
             expenseitem.desc = textdesc;
             expenseitem.amount = expense;
+            expenseitem.moment = new Date();
 
             allexpenses.push(expenseitem);
-            console.table(allexpenses);
 
             //add that value to totalexpense
             totalexpense = totalexpense + expense;
             
             //set heading element to totalexpense
-            const sometext = `TOTAL EXPENSES: ${totalexpense}` 
+            const sometext = `EXPENSES: ${totalexpense}` 
             headingEl.textContent = sometext; 
-            console.log({totalexpense})
 
             //show table here
             const allexpenseHTML = allexpenses.map(expense => createlist(expense));
@@ -123,7 +140,6 @@
             const joinedallexpenseHTML = allexpenseHTML.join("");
 
             expensetable.innerHTML = joinedallexpenseHTML
-            console.log(joinedallexpenseHTML)
         }
 
         //get the btn element
@@ -132,21 +148,37 @@
         //listen to click
         element.addEventListener("click", addexpense, false);
 
-        function createlist({desc,amount}){
-            return `
-                <li class="list-group-item settable">
-                <div class="list-group " style="font-size:15px">
-                <span>${desc}
+        //Controller functions
+        function getdate(dates) {
+            return dates.toLocaleDateString('en-US', {
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+                })
+        }
 
-                ${amount}</span>
-                
-                  <button class="btn text-right mb-3" style="">
-                  <i class="fa fa-trash fa-2x" style="color: gray;"></i>
-                  </button>
-                </li>
-                </div>` 
+        function createlist({desc, amount, moment}) {
+            return `
+                <div>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between settable" style="margin-top:1%; font-style: italic; font-size: small; ">
+                    <div class="d-flex flex-column">
+                        Spent on : ${desc}
+                        <small class="text-muted">${getdate(moment)}</small>
+                    </div>
+                    <div>
+                        <span class="px-5">
+                        Amount spent: ₹${amount}
+                        </span>
+                        <button type="button" class="btn btn-outline-dark btn-sm">
+                            <i class="fa fa-trash fa-2x" style="color: white;"></i>
+                        </button>
+                    </div>
+                </ul>
+             </div>  ` 
         }
 
     </script>
 </body>
 </html>
+    
